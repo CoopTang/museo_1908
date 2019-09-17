@@ -119,9 +119,9 @@ class CuratorTest < Minitest::Test
     @curator.add_photograph(@photo_4)
     assert_equal [@artist_3], @curator.artists_with_multiple_photographs
 
-    new_photo = Mock.new
-    @artist_1.add_photograph(new_photo)
-    require 'pry'; binding.pry
+    new_photo = mock()
+    new_photo.stubs(:artist_id).returns("1")
+    @curator.add_photograph(new_photo)
     assert_equal [@artist_1, @artist_3], @curator.artists_with_multiple_photographs
   end
 
