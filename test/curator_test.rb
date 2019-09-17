@@ -137,4 +137,89 @@ class CuratorTest < Minitest::Test
     assert_equal [], @curator.photographs_taken_by_artist_from("Argentina")
   end
 
+  def test_can_create_artist_data_from_csv_line
+    line = {
+      "id" => "1",
+      "name" => "Henri Cartier-Bresson",
+      "born" => "1908",
+      "died" => "2004",
+      "country" => "France"
+    }
+    expected_hash = {
+      :id => "1",
+      :name => "Henri Cartier-Bresson",
+      :born => "1908",
+      :died => "2004",
+      :country => "France"
+    }
+
+    assert_equal expected_hash, @curator.line_to_artist_hash(line)
+  end
+
+  def test_can_create_photo_data_from_csv_line
+    line = {
+      "id" => "1",
+      "name" => "Rue Mouffetard, Paris (Boy with Bottles)",
+      "artist_id" => "1",
+      "year" => "1954"
+    }
+    expected_hash = {
+      :id => "1",
+      :name => "Rue Mouffetard, Paris (Boy with Bottles)",
+      :artist_id => "1",
+      :year => "1954"
+    }
+    assert_equal expected_hash, @curator.line_to_photograph_hash(line)
+  end
+
+  def test_can_load_artists_from_csv
+    @curator.load_artists("./data/artists.csv")
+
+    assert_equal 6, @curator.artists.length
+
+    @curator.artists.each do |artist|
+      assert_instance_of Artist, artist
+      assert artist.id
+      assert artist.name
+      assert artist.born
+      assert artist.died
+      assert artist.country
+    end
+  end
+
+  def test_can_load_photographs_from_csv
+    @curator.load_photographs("./data/photographs.csv")
+
+    assert_equal 4, @curator.photographs.length
+
+    @curator.photographs.each do |photo|
+      assert_instance_of Photograph, photo
+      assert photo.id
+      assert photo.name
+      assert photo.artist_id
+      assert photo.year
+    end
+  end
+
+  def test_can_find_photographs_taken_in_a_specified_time_range
+    @curator.load_photographs('./data/photographs.csv')
+    @curator.load_artists('./data/artists.csv')
+
+    expected_photos = []
+    expected_photos.push(@curator.find_photograph_by_id("1"))
+    expected_photos.push(@curator.find_photograph_by_id("4"))
+    assert_equal expected_photos, @curator.photographs_taken_between(1950..1965)
+  end
+
+  def test_can_find_the_artists_age_when_a_photograph_was_taken
+    @curator.load_photographs('./data/photographs.csv')
+    @curator.load_artists('./data/artists.csv')
+    diane_arbus = @curator.find_artist_by_id("3")
+    expected_hash = {
+      44 =>"Identical Twins, Roselle, New Jersey", 
+      39 =>"Child with Toy Hand Grenade in Central Park"
+    }
+    assert_equal expected_hash, @curator.artists_photographs_by_age(diane_arbus)
+  end
+
 end

@@ -1,3 +1,5 @@
+require 'csv'
+
 class Curator
   attr_reader :photographs,
               :artists
@@ -38,4 +40,48 @@ class Curator
       find_artist_by_id(photo.artist_id).country == country 
     end
   end
+
+  def line_to_artist_hash(line)
+    {
+      :id => line["id"],
+      :name => line["name"],
+      :born => line["born"],
+      :died => line["died"],
+      :country => line["country"]
+    }
+  end
+
+  def line_to_photograph_hash(line)
+    {
+      :id => line["id"],
+      :name => line["name"],
+      :artist_id => line["artist_id"],
+      :year => line["year"]
+    }
+  end
+
+  def load_artists(file)
+    CSV.foreach(file, headers: true) do |line|
+      add_artist(Artist.new(line_to_artist_hash(line)))
+    end
+  end
+
+  def load_photographs(file)
+    CSV.foreach(file, headers: true) do |line|
+      add_photograph(Photograph.new(line_to_photograph_hash(line)))
+    end
+  end
+
+  def photographs_taken_between(range)
+    @photographs.find_all { |photo| range.include?(photo.year.to_i) }
+  end
+
+  def artists_photographs_by_age(artist)
+    age_painting_hash = {}
+    find_photographs_by_artist(artist).each do |photo|
+      age_painting_hash[photo.year.to_i - artist.born.to_i] = photo.name
+    end
+    age_painting_hash
+  end
+
 end
