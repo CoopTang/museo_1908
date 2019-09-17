@@ -137,4 +137,39 @@ class CuratorTest < Minitest::Test
     assert_equal [], @curator.photographs_taken_by_artist_from("Argentina")
   end
 
+  def test_can_create_artist_data_from_csv_line
+    line = {
+      "id" => "1",
+      "name" => "Henri Cartier-Bresson",
+      "born" => "1908",
+      "died" => "2004",
+      "country" => "France"
+    }
+    expected_hash = {
+      :id => "1",
+      :name => "Henri Cartier-Bresson",
+      :born => "1908",
+      :died => "2004",
+      :country => "France"
+    }
+
+    assert_equal expected_hash, @curator.line_to_artist_hash(line)
+  end
+
+  def test_can_create_photo_data_from_csv_line
+    line = {
+      "id" => "1",
+      "name" => "Rue Mouffetard, Paris (Boy with Bottles)",
+      "artist_id" => "1",
+      "year" => "1954"
+    }
+    expected_hash = {
+      :id => "1",
+      :name => "Rue Mouffetard, Paris (Boy with Bottles)",
+      :artist_id => "1",
+      :year => "1954"
+    }
+    assert_equal expected_hash, @curator.line_to_photograph_hash(line)
+  end
+
 end
