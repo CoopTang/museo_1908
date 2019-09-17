@@ -179,6 +179,11 @@ class CuratorTest < Minitest::Test
 
     @curator.artists.each do |artist|
       assert_instance_of Artist, artist
+      assert artist.id
+      assert artist.name
+      assert artist.born
+      assert artist.died
+      assert artist.country
     end
   end
 
@@ -189,6 +194,10 @@ class CuratorTest < Minitest::Test
 
     @curator.photographs.each do |photo|
       assert_instance_of Photograph, photo
+      assert photo.id
+      assert photo.name
+      assert photo.artist_id
+      assert photo.year
     end
   end
 
