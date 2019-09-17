@@ -182,4 +182,14 @@ class CuratorTest < Minitest::Test
     end
   end
 
+  def test_can_load_photographs_from_csv
+    @curator.load_photographs("./data/photographs.csv")
+
+    assert_equal 4, @curator.photographs.length
+
+    @curator.photographs.each do |photo|
+      assert_instance_of Photograph, photo
+    end
+  end
+
 end
