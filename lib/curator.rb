@@ -1,3 +1,5 @@
+require 'csv'
+
 class Curator
   attr_reader :photographs,
               :artists
@@ -37,5 +39,24 @@ class Curator
     @photographs.find_all do |photo| 
       find_artist_by_id(photo.artist_id).country == country 
     end
+  end
+
+  def line_to_artist_hash(line)
+    {
+      :id => line["id"],
+      :name => line["name"],
+      :born => line["born"],
+      :died => line["died"],
+      :country => line["country"]
+    }
+  end
+
+  def line_to_photograph_hash(line)
+    {
+      :id => line["id"],
+      :name => line["name"],
+      :artist_id => line["artist_id"],
+      :year => line["year"]
+    }
   end
 end
