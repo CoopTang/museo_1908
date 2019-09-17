@@ -219,7 +219,7 @@ class CuratorTest < Minitest::Test
       44 =>"Identical Twins, Roselle, New Jersey", 
       39 =>"Child with Toy Hand Grenade in Central Park"
     }
-    @curator.artists_photographs_by_age(diane_arbus)
+    assert_equal expected_hash, @curator.artists_photographs_by_age(diane_arbus)
   end
 
 end
