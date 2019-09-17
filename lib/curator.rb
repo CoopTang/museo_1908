@@ -62,7 +62,15 @@ class Curator
 
   def load_artists(file)
     CSV.foreach(file, headers: true) do |line|
-      @artists.push(Artist.new(line_to_artist_hash(line)))
+      artist =Artist.new(line_to_artist_hash(line))
+      @artists.push(artist)
+    end
+  end
+
+  def load_photographs(file)
+    CSV.foreach(file, headers: true) do |line|
+      photo = Photograph.new(line_to_photograph_hash(line))
+      @photographs.push(photo)
     end
   end
 
