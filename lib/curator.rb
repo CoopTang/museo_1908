@@ -23,4 +23,14 @@ class Curator
     @photographs.find { |photo| photo.id == id }
   end
 
+  def find_photographs_by_artist(artist)
+    @photographs.find_all { |photo| photo.artist_id == artist.id }
+  end
+
+  def artists_with_multiple_photographs
+    @artists.find_all { |artist| find_photographs_by_artist(artist).length > 1 }
+  end
+
+  def photographs_taken_by_artist_from(country)
+  end
 end
