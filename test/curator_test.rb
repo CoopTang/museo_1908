@@ -126,6 +126,13 @@ class CuratorTest < Minitest::Test
   end
 
   def test_it_can_give_photos_taken_by_artists_from_a_specified_country
+    @curator.add_artist(@artist_1)  
+    @curator.add_artist(@artist_2)    
+    @curator.add_artist(@artist_3)
+    @curator.add_photograph(@photo_1)
+    @curator.add_photograph(@photo_2)
+    @curator.add_photograph(@photo_3)
+    @curator.add_photograph(@photo_4)
     assert_equal [@photo_2, @photo_3, @photo_4], @curator.photographs_taken_by_artist_from("United States")
     assert_equal [], @curator.photographs_taken_by_artist_from("Argentina")
   end
