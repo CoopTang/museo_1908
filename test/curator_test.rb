@@ -172,4 +172,14 @@ class CuratorTest < Minitest::Test
     assert_equal expected_hash, @curator.line_to_photograph_hash(line)
   end
 
+  def test_can_load_artists_from_csv
+    @curator.load_artists("./data/artists.csv")
+
+    assert_equal 6, @curator.artists.length
+
+    @curator.artists.each do |artist|
+      assert_instance_of Artist, artist
+    end
+  end
+
 end
