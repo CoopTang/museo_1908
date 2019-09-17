@@ -201,4 +201,25 @@ class CuratorTest < Minitest::Test
     end
   end
 
+  def test_can_find_photographs_taken_in_a_specified_time_range
+    @curator.load_photographs('./data/photographs.csv')
+    @curator.load_artists('./data/artists.csv')
+
+    expected_photos = []
+    expected_photos.push(@curator.find_photograph_by_id("1"))
+    expected_photos.push(@curator.find_photograph_by_id("4"))
+    assert_equal expected_photos, @curator.photographs_taken_between(1950..1965)
+  end
+
+  def test_can_find_the_artists_age_when_a_photograph_was_taken
+    @curator.load_photographs('./data/photographs.csv')
+    @curator.load_artists('./data/artists.csv')
+    diane_arbus = @curator.find_artist_by_id("3")
+    expected_hash = {
+      44 =>"Identical Twins, Roselle, New Jersey", 
+      39 =>"Child with Toy Hand Grenade in Central Park"
+    }
+    @curator.artists_photographs_by_age(diane_arbus)
+  end
+
 end
