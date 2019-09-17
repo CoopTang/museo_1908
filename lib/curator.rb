@@ -59,4 +59,11 @@ class Curator
       :year => line["year"]
     }
   end
+
+  def load_artists(file)
+    CSV.foreach(file, headers: true) do |line|
+      @artists.push(Artist.new(line_to_artist_hash(line)))
+    end
+  end
+
 end
